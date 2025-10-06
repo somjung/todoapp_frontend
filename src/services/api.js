@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-// API base configuration - แก้ไข baseURL ให้ชี้ไปที่ Backend
+// API base configuration
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
-
 const api = axios.create({
   baseURL: `${API_BASE_URL}/api`, // เพิ่ม /api ต่อท้าย baseURL
   headers: {
@@ -32,8 +31,14 @@ class ApiService {
     return response.data;
   }
 
-  async register(username, name, email, password) {
-    const response = await api.post('/auth/register', { username, name, email, password });
+  async register(username, name, email, password, confirmPassword) {
+    const response = await api.post('/auth/register', { 
+      username, 
+      name, 
+      email, 
+      password,
+      confirmPassword 
+    });
     return response.data;
   }
 

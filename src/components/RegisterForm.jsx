@@ -6,6 +6,7 @@ function RegisterForm({ onToggle }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const { register } = useAuth();
@@ -15,7 +16,21 @@ function RegisterForm({ onToggle }) {
     setLoading(true);
     setError('');
 
-    const result = await register(username, name, email, password);
+    // Validate password confirmation
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      setLoading(false);
+      return;
+    }
+
+    // Validate password strength
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters long');
+      setLoading(false);
+      return;
+    }
+
+    const result = await register(username, name, email, password, confirmPassword);
     if (!result.success) {
       setError(result.message);
     }
@@ -80,8 +95,29 @@ function RegisterForm({ onToggle }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="At least 8 characters"
               required
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                confirmPassword && password !== confirmPassword
+                  ? 'border-red-300 focus:ring-red-500'
+                  : 'border-gray-300 focus:ring-blue-500'
+              }`}
+              placeholder="Re-enter your password"
+              required
+            />
+            {confirmPassword && password !== confirmPassword && (
+              <p className="mt-1 text-sm text-red-600">Passwords do not match</p>
+            )}
           </div>
           <button
             type="submit"

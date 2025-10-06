@@ -53,9 +53,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (username, name, email, password) => {
+  const register = async (username, name, email, password, confirmPassword) => {
     try {
-      const response = await apiService.register(username, name, email, password);
+      const response = await apiService.register(username, name, email, password, confirmPassword);
       
       if (response.success) {
         apiService.setToken(response.token);
