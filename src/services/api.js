@@ -1,8 +1,10 @@
 import axios from 'axios';
 
-// API base configuration
+// API base configuration - แก้ไข baseURL ให้ชี้ไปที่ Backend
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: `${API_BASE_URL}/api`, // เพิ่ม /api ต่อท้าย baseURL
   headers: {
     'Content-Type': 'application/json',
   },
